@@ -1,7 +1,7 @@
 # VELOOP Rewards — Exchange Center
 
 **Repository:** https://github.com/Rudranil-12/Veloop_Watch_Ads
-**Reference (existing implementation):** https://velooprewards.in/exchange-center
+**LINK:** https://veloop-watch-ads-two.vercel.app/
 
 A complete frontend redesign of the VELOOP Rewards Exchange Center. The
 existing Gems → VEs exchange logic and rates are preserved exactly; only the
