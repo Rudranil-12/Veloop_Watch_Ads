@@ -1,0 +1,188 @@
+.wrap {
+  position: relative;
+  margin: 44px 0;
+  padding: 28px 30px;
+  border-radius: var(--r-lg);
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  background: linear-gradient(150deg, #221d3a, #171a2c 60%);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-lift);
+  overflow: hidden;
+}
+
+.glowLeft, .glowRight {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  pointer-events: none;
+}
+
+.glowLeft {
+  width: 220px;
+  height: 220px;
+  left: -60px;
+  top: -60px;
+  background: rgba(139, 124, 246, 0.28);
+}
+
+.glowRight {
+  width: 200px;
+  height: 200px;
+  right: -50px;
+  bottom: -70px;
+  background: rgba(231, 180, 92, 0.18);
+}
+
+.ringZone {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring { width: 100%; height: 100%; transform: rotate(-90deg); }
+
+.ringTrack {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 8;
+}
+
+.ringFill {
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.ringFillDone {
+  fill: none;
+  stroke: url(#goalGrad);
+  stroke: var(--gold-soft);
+  stroke-width: 8;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 10px rgba(246, 217, 154, 0.55));
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.ringCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pct {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.doneIcon { color: var(--gold-soft); }
+
+.sparkle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold-soft);
+  box-shadow: 0 0 6px rgba(246, 217, 154, 0.8);
+  transform: rotate(var(--angle)) translate(72px) rotate(calc(-1 * var(--angle)));
+}
+
+.body {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-width: 0;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--violet);
+  margin-bottom: 8px;
+}
+
+.body h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.body p {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  max-width: 480px;
+  line-height: 1.5;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.metaChip {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-soft);
+}
+
+.streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--gold-soft);
+}
+
+.claimBtn, .claimedBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 11px 20px;
+  border-radius: 999px;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.claimBtn {
+  background: linear-gradient(120deg, var(--gold-soft), var(--gold));
+  color: #201305;
+  box-shadow: 0 10px 24px -10px rgba(231, 180, 92, 0.7);
+}
+
+.claimBtn:hover { filter: brightness(1.06); }
+
+.claimedBtn {
+  background: var(--success-dim);
+  color: var(--success);
+  cursor: default;
+}
+
+@media (max-width: 700px) {
+  .wrap { flex-direction: column; text-align: center; padding: 26px 22px; }
+  .metaRow { justify-content: center; }
+  .body p { max-width: none; }
+}

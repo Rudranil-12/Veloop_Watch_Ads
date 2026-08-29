@@ -1,0 +1,172 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-base);
+  overflow: hidden;
+}
+
+.aurora {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(560px 380px at 20% 15%, rgba(139, 124, 246, 0.22), transparent 60%),
+    radial-gradient(520px 360px at 82% 80%, rgba(231, 180, 92, 0.16), transparent 60%),
+    radial-gradient(700px 500px at 50% 50%, rgba(124, 156, 251, 0.08), transparent 65%);
+  animation: driftAurora 7s ease-in-out infinite alternate;
+  filter: blur(6px);
+}
+
+@keyframes driftAurora {
+  0% { transform: scale(1) rotate(0deg); }
+  100% { transform: scale(1.12) rotate(6deg); }
+}
+
+.stage {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+.markWrap {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+
+.ringTrack {
+  fill: none;
+  stroke: var(--border-soft);
+  stroke-width: 3;
+}
+
+.ringFill {
+  fill: none;
+  stroke: url(#none);
+  stroke: var(--gold-soft);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.12s linear;
+  filter: drop-shadow(0 0 6px rgba(246, 217, 154, 0.55));
+}
+
+.shardOrbit {
+  position: absolute;
+  inset: 0;
+  animation: spin 5.2s linear infinite;
+}
+
+.shard {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: linear-gradient(135deg, var(--violet), var(--blue));
+  box-shadow: 0 0 10px rgba(139, 124, 246, 0.7);
+  transform:
+    rotate(calc(var(--i) * 72deg))
+    translate(58px)
+    rotate(calc(var(--i) * -72deg));
+  animation: shardPulse 1.6s ease-in-out calc(var(--i) * 0.12s) infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shardPulse {
+  0%, 100% { opacity: 0.45; transform-origin: center; scale: 1; }
+  50% { opacity: 1; scale: 1.4; }
+}
+
+.core {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(155deg, var(--bg-card), var(--bg-elevated));
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-lift);
+  animation: breathe 2.4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.coreMark {
+  width: 26px;
+  height: 26px;
+  fill: url(#gradFallback);
+  fill: var(--gold-soft);
+  filter: drop-shadow(0 0 8px rgba(246, 217, 154, 0.6));
+}
+
+.progressNum {
+  position: absolute;
+  bottom: -30px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.wordmark {
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+}
+
+.wordmark span {
+  color: var(--gold-soft);
+}
+
+.message {
+  min-height: 18px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.barTrack {
+  width: 200px;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--border-soft);
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--violet), var(--gold-soft));
+  transition: width 0.12s linear;
+}
+
+@media (max-width: 480px) {
+  .markWrap { width: 108px; height: 108px; }
+  .wordmark { font-size: 19px; }
+}

@@ -1,0 +1,114 @@
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-lg);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.card:hover {
+  border-color: rgba(231, 180, 92, 0.35);
+  background: var(--bg-card-hover);
+}
+
+.disabled { opacity: 0.55; }
+.disabled:hover { border-color: var(--border-soft); background: var(--bg-card); }
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.heading h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.heading p {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.rate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+}
+
+.rateSide {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rateSide:last-child { align-items: flex-end; }
+
+.rateLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.rateValue {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.rateValue.gold { color: var(--gold-soft); }
+
+.rateArrow { color: var(--text-muted); flex-shrink: 0; }
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.adTag, .lockedTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.cta, .ctaSecondary {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-left: auto;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.cta {
+  background: linear-gradient(135deg, var(--gold-soft), var(--gold));
+  color: #1c1508;
+}
+
+.cta:hover { filter: brightness(1.06); transform: translateY(-1px); }
+
+.ctaSecondary {
+  background: transparent;
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+}
+
+.ctaSecondary:hover { border-color: var(--gold); color: var(--gold-soft); }

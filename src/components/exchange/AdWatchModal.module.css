@@ -1,0 +1,191 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 11, 20, 0.72);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 110;
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  background: linear-gradient(180deg, var(--bg-elevated), var(--bg-card));
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lift);
+  padding: 30px 26px 26px;
+  text-align: center;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border-soft);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeBtn:hover { color: var(--text-primary); border-color: var(--border-strong); }
+
+.center { display: flex; flex-direction: column; align-items: center; }
+
+.pulseDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--gold);
+  margin-bottom: 16px;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(0.7); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+.helper { color: var(--text-secondary); font-size: 13px; }
+
+.playing { display: flex; flex-direction: column; align-items: center; }
+
+.adFrame {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  border-radius: var(--r-md);
+  background:
+    linear-gradient(135deg, rgba(124,156,251,0.18), rgba(139,124,246,0.14) 55%, rgba(231,180,92,0.12));
+  border: 1px solid var(--border-soft);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.adTag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary);
+  background: rgba(10, 11, 20, 0.55);
+  padding: 4px 8px;
+  border-radius: 999px;
+  z-index: 1;
+}
+
+.adShimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.09) 45%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.2s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 140% 0; }
+  100% { background-position: -60% 0; }
+}
+
+.ringWrap {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin-bottom: 16px;
+}
+
+.ringWrap svg { transform: rotate(-90deg); }
+
+.ringTrack {
+  fill: none;
+  stroke: var(--border-soft);
+  stroke-width: 6;
+}
+
+.ringProgress {
+  fill: none;
+  stroke: url(#none);
+  stroke: var(--gold);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.ringNumber {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.burstWrap {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+}
+
+.particle {
+  position: absolute;
+  color: var(--gold-soft);
+  display: flex;
+}
+
+.gemBadge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--gold-dim);
+  border: 1px solid rgba(231, 180, 92, 0.4);
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title { font-size: 18px; font-weight: 600; margin: 14px 0 6px; }
+
+.rewardValue {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--gold-soft);
+  margin-bottom: 4px;
+}
+
+.primaryBtn {
+  margin-top: 18px;
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--gold-soft), var(--gold));
+  color: #1c1508;
+}
+
+.primaryBtn:hover { filter: brightness(1.05); }

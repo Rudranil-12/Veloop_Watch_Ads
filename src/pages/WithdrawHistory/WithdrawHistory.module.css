@@ -1,0 +1,116 @@
+.totalTag {
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--gold-dim);
+  color: var(--gold-soft);
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.filterActive {
+  color: var(--bg-base);
+  background: linear-gradient(120deg, var(--gold-soft), var(--violet));
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.liveTag {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--success);
+  background: var(--success-dim);
+  padding: 5px 10px;
+  border-radius: 999px;
+}
+
+.liveTag svg { animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+.tableWrap {
+  border-radius: var(--r-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  overflow: hidden;
+}
+
+.tableHead {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 16px;
+  padding: 12px 20px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.list { list-style: none; margin: 0; padding: 0; }
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 13.5px;
+}
+
+.row:last-child { border-bottom: none; }
+
+.amount { font-weight: 600; }
+.method { color: var(--text-secondary); }
+.when { color: var(--text-muted); font-size: 12.5px; }
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  justify-self: end;
+}
+
+.success { color: var(--success); background: var(--success-dim); }
+.pending { color: var(--gold-soft); background: var(--gold-dim); }
+.failed { color: var(--danger); background: var(--danger-dim); }
+
+.empty { padding: 40px; text-align: center; color: var(--text-muted); font-size: 13.5px; }
+
+@media (max-width: 700px) {
+  .tableHead { display: none; }
+  .row {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    gap: 6px;
+  }
+  .status { justify-self: start; }
+}
