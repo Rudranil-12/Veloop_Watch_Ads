@@ -90,13 +90,21 @@
 .detailsCard li {
   display: flex;
   align-items: center;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 4px 10px;
   padding: 12px 0;
   border-bottom: 1px solid var(--border-soft);
   font-size: 13.5px;
 }
 
 .detailsCard li:last-child { border-bottom: none; }
+
+.rowHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
 
 .rowIcon {
   width: 30px;
@@ -111,8 +119,22 @@
 }
 
 .rowLabel { color: var(--text-secondary); width: 110px; flex-shrink: 0; }
-.rowValue { color: var(--text-primary); font-weight: 500; }
-.rowValueSuccess { color: var(--success); font-weight: 600; }
+.rowValue {
+  color: var(--text-primary);
+  font-weight: 500;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+.rowValueSuccess {
+  color: var(--success);
+  font-weight: 600;
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
 
 .statsCard { display: flex; flex-direction: column; gap: 12px; }
 
@@ -137,4 +159,36 @@
 @media (max-width: 780px) {
   .grid { grid-template-columns: 1fr; }
   .heroCard { flex-direction: column; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .heroCard {
+    padding: 22px 18px;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .avatar { width: 64px; height: 64px; font-size: 24px; border-radius: 18px; }
+
+  .heroText h2 { font-size: 19px; }
+
+  .grid { gap: 14px; }
+
+  .detailsCard, .statsCard { padding: 16px; }
+
+  .detailsCard li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 12px 0;
+  }
+
+  .rowValue, .rowValueSuccess {
+    text-align: left;
+    padding-left: 40px;
+    width: 100%;
+    font-size: 13px;
+  }
+
+  .statTile { padding: 11px 12px; }
 }

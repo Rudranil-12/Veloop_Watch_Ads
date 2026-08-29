@@ -1,10 +1,22 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { PlayCircle, Gem, Sparkles, ArrowRight } from 'lucide-react';
+import { PlayCircle, Gem, Sparkles, ArrowRight, Clock } from 'lucide-react';
 import InfoTip from './InfoTip';
 import { infoTooltips, gemEarnActions } from '../../data/exchangeData';
+import { formatCountdown } from '../../utils/time';
 import styles from './EarnGems.module.css';
 
-export default function EarnGems({ ads, watchCounts, onWatch }) {
+export default function EarnGems({ ads, watchCounts, resetAt, onWatch }) {
+  // Ticks once a minute so the "resets in Xh Ym" countdown stays accurate
+  // and the cards automatically re-enable themselves once the 24h window
+  // rolls over — no manual refresh needed.
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const interval = setInterval(() => setNow(Date.now()), 30 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const msUntilReset = resetAt ? resetAt - now : 0;
   return (
     <section className={styles.wrap} aria-labelledby="earn-gems-heading">
       <div className={styles.sectionHead}>
@@ -49,6 +61,12 @@ export default function EarnGems({ ads, watchCounts, onWatch }) {
                   </span>
                 </div>
 
+                {capped && msUntilReset > 0 && (
+                  <span className={styles.resetLabel}>
+                    <Clock size={12} /> Reopens in {formatCountdown(msUntilReset)}
+                  </span>
+                )}
+
                 <button
                   type="button"
                   className={capped ? styles.ctaDisabled : styles.cta}
@@ -56,7 +74,7 @@ export default function EarnGems({ ads, watchCounts, onWatch }) {
                   onClick={() => onWatch(ad)}
                 >
                   {capped ? (
-                    'Come back tomorrow'
+                    'Come back later'
                   ) : (
                     <>
                       <Sparkles size={14} /> Watch Ad

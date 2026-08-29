@@ -42,8 +42,10 @@ export default function Profile() {
           <ul>
             {rows.map((r) => (
               <li key={r.label}>
-                <span className={styles.rowIcon}><r.icon size={15} /></span>
-                <span className={styles.rowLabel}>{r.label}</span>
+                <span className={styles.rowHead}>
+                  <span className={styles.rowIcon}><r.icon size={15} /></span>
+                  <span className={styles.rowLabel}>{r.label}</span>
+                </span>
                 <span className={r.tone === 'success' ? styles.rowValueSuccess : styles.rowValue}>{r.value}</span>
               </li>
             ))}

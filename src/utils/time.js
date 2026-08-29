@@ -1,3 +1,13 @@
+export function formatCountdown(ms) {
+  if (!ms || ms <= 0) return '0m';
+  const totalMinutes = Math.ceil(ms / 60000);
+  const hrs = Math.floor(totalMinutes / 60);
+  const mins = totalMinutes % 60;
+  if (hrs <= 0) return `${mins}m`;
+  if (mins === 0) return `${hrs}h`;
+  return `${hrs}h ${mins}m`;
+}
+
 export function timeAgo(timestamp) {
   if (!timestamp) return '';
   const diffMs = Date.now() - timestamp;

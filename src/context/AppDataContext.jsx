@@ -8,6 +8,7 @@ import {
   dailyGoalTarget,
   liveActivityFeed,
 } from '../data/exchangeData';
+import { loadUserState, saveUserState } from '../utils/storage';
 
 // ---------------------------------------------------------------------------
 // AppDataContext
@@ -18,24 +19,55 @@ import {
 // app stays in sync — the same way a real socket/polling layer would.
 // Swap the setInterval simulations for real subscriptions when the backend
 // is ready; component-facing shapes are designed to stay identical.
+//
+// Persistence: every piece of data that the user "owns" (balance, history,
+// withdrawals, notifications, activity feed, ad-watch limits) is saved to
+// localStorage under a key namespaced with the signed-in member's id, and
+// restored on load — so a refresh no longer wipes progress, and switching
+// between different member accounts on the same browser never mixes their
+// data together. Swap `userId` for the real authenticated session id once a
+// backend/auth layer exists.
 // ---------------------------------------------------------------------------
 
 const AppDataContext = createContext(null);
+
+// How often "Earn Gems" watch limits (per-ad tiers and the daily total)
+// automatically reset — 24 hours after the current window started.
+const ADS_WINDOW_MS = 24 * 60 * 60 * 1000;
+const ADS_DAILY_LIMIT = 6;
 
 function uid(prefix) {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 }
 
 export function AppDataProvider({ children }) {
-  const [balance, setBalance] = useState(userBalance);
   const [profile] = useState(userProfile);
-  const [history, setHistory] = useState(conversionHistory);
-  const [withdrawals, setWithdrawals] = useState(withdrawHistorySeed);
-  const [notifications, setNotifications] = useState(notificationsSeed);
-  const [activity, setActivity] = useState(liveActivityFeed);
-  const [adsWatchedToday, setAdsWatchedToday] = useState(5);
-  const [adsDailyLimit] = useState(6);
+  // Identifies the current member for storage purposes — falls back to
+  // 'guest' if a profile somehow has no email yet.
+  const userId = profile?.email || 'guest';
+
+  const [balance, setBalance] = useState(() => loadUserState(userId, 'balance', userBalance));
+  const [history, setHistory] = useState(() => loadUserState(userId, 'history', conversionHistory));
+  const [withdrawals, setWithdrawals] = useState(() => loadUserState(userId, 'withdrawals', withdrawHistorySeed));
+  const [notifications, setNotifications] = useState(() => loadUserState(userId, 'notifications', notificationsSeed));
+  const [activity, setActivity] = useState(() => loadUserState(userId, 'activity', liveActivityFeed));
+
+  const [adsWatchedToday, setAdsWatchedToday] = useState(() => loadUserState(userId, 'adsWatchedToday', 0));
+  const [adWatchCounts, setAdWatchCounts] = useState(() => loadUserState(userId, 'adWatchCounts', {}));
+  const [adWindowStart, setAdWindowStart] = useState(() => loadUserState(userId, 'adWindowStart', Date.now()));
+  const [adsDailyLimit] = useState(ADS_DAILY_LIMIT);
+
   const [connection, setConnection] = useState('live'); // live | syncing
+
+  // --- Persist every owned slice of state whenever it changes ------------
+  useEffect(() => { saveUserState(userId, 'balance', balance); }, [userId, balance]);
+  useEffect(() => { saveUserState(userId, 'history', history); }, [userId, history]);
+  useEffect(() => { saveUserState(userId, 'withdrawals', withdrawals); }, [userId, withdrawals]);
+  useEffect(() => { saveUserState(userId, 'notifications', notifications); }, [userId, notifications]);
+  useEffect(() => { saveUserState(userId, 'activity', activity); }, [userId, activity]);
+  useEffect(() => { saveUserState(userId, 'adsWatchedToday', adsWatchedToday); }, [userId, adsWatchedToday]);
+  useEffect(() => { saveUserState(userId, 'adWatchCounts', adWatchCounts); }, [userId, adWatchCounts]);
+  useEffect(() => { saveUserState(userId, 'adWindowStart', adWindowStart); }, [userId, adWindowStart]);
 
   const todayEarnings = useMemo(
     () => history
@@ -89,10 +121,42 @@ export function AppDataProvider({ children }) {
     }
   }, [pushActivity, pushNotification]);
 
-  const recordAdWatch = useCallback((gemsEarned, adLabel) => {
-    setAdsWatchedToday((prev) => Math.min(adsDailyLimit, prev + 1));
-    pushActivity({ label: 'Ad reward collected', detail: `+${gemsEarned} Gems · ${adLabel}`, tone: 'gold' });
-  }, [adsDailyLimit, pushActivity]);
+  // --- Earn Gems / "watch ad" daily limits --------------------------------
+  // Each ad tier tracks its own watch count, plus a combined daily total.
+  // Everything resets automatically 24 hours after the current window
+  // started — including while the tab is open (checked on a timer) and
+  // right after a refresh/relaunch (checked on mount below), so a capped
+  // tier reopens on its own instead of staying stuck forever.
+  const resetAdWindowIfExpired = useCallback(() => {
+    setAdWindowStart((start) => {
+      if (Date.now() - start >= ADS_WINDOW_MS) {
+        setAdWatchCounts({});
+        setAdsWatchedToday(0);
+        return Date.now();
+      }
+      return start;
+    });
+  }, []);
+
+  useEffect(() => {
+    resetAdWindowIfExpired();
+    const interval = setInterval(resetAdWindowIfExpired, 60 * 1000);
+    // Also re-check whenever the tab regains focus/visibility, in case the
+    // 24h window elapsed while the app was in the background.
+    document.addEventListener('visibilitychange', resetAdWindowIfExpired);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', resetAdWindowIfExpired);
+    };
+  }, [resetAdWindowIfExpired]);
+
+  const adResetAt = adWindowStart + ADS_WINDOW_MS;
+
+  const recordAdWatch = useCallback((ad, gemsEarned) => {
+    setAdWatchCounts((prev) => ({ ...prev, [ad.id]: (prev[ad.id] ?? 0) + 1 }));
+    setAdsWatchedToday((prev) => prev + 1);
+    pushActivity({ label: 'Ad reward collected', detail: `+${gemsEarned} Gems · ${ad.label}`, tone: 'gold' });
+  }, [pushActivity]);
 
   const requestWithdrawal = useCallback((amountVEs, method) => {
     const entry = {
@@ -170,6 +234,8 @@ export function AppDataProvider({ children }) {
     activity,
     adsWatchedToday,
     adsDailyLimit,
+    adWatchCounts,
+    adResetAt,
     connection,
     todayEarnings,
     lifetimeEarnings,
@@ -186,7 +252,7 @@ export function AppDataProvider({ children }) {
     pushActivity,
   }), [
     balance, profile, history, withdrawals, notifications, activity, adsWatchedToday,
-    adsDailyLimit, connection, todayEarnings, lifetimeEarnings, goalProgress, goalCompleted,
+    adsDailyLimit, adWatchCounts, adResetAt, connection, todayEarnings, lifetimeEarnings, goalProgress, goalCompleted,
     recordConversion, recordAdWatch, requestWithdrawal, markAllNotificationsRead,
     clearAllNotifications, dismissNotification, pushNotification, pushActivity,
   ]);

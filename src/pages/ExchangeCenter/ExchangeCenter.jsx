@@ -27,7 +27,10 @@ import styles from './ExchangeCenter.module.css';
 // In production, replace loadOptions() with a real API call to the
 // exchange-options endpoint and keep the same status transitions.
 export default function ExchangeCenter() {
-  const { balance, setBalance, history, recordConversion, recordAdWatch } = useAppData();
+  const {
+    balance, setBalance, history, recordConversion, recordAdWatch,
+    adWatchCounts, adResetAt,
+  } = useAppData();
   const [fetchStatus, setFetchStatus] = useState('loading');
   const [options, setOptions] = useState([]);
 
@@ -35,7 +38,6 @@ export default function ExchangeCenter() {
   const [modalStatus, setModalStatus] = useState(null); // review | insufficient | processing | success
 
   const [activeAd, setActiveAd] = useState(null);
-  const [adWatchCounts, setAdWatchCounts] = useState({});
 
   const loadOptions = () => {
     setFetchStatus('loading');
@@ -78,8 +80,7 @@ export default function ExchangeCenter() {
 
   const collectAdReward = (gemsEarned) => {
     setBalance((prev) => ({ ...prev, gems: prev.gems + gemsEarned }));
-    setAdWatchCounts((prev) => ({ ...prev, [activeAd.id]: (prev[activeAd.id] ?? 0) + 1 }));
-    recordAdWatch(gemsEarned, activeAd.label);
+    recordAdWatch(activeAd, gemsEarned);
     setActiveAd(null);
   };
 
@@ -107,7 +108,7 @@ export default function ExchangeCenter() {
         <Reveal delay={0.05}><TodayAtGlance /></Reveal>
 
         <Reveal delay={0.05}>
-          <EarnGems ads={adRewardOptions} watchCounts={adWatchCounts} onWatch={handleWatchAd} />
+          <EarnGems ads={adRewardOptions} watchCounts={adWatchCounts} resetAt={adResetAt} onWatch={handleWatchAd} />
         </Reveal>
 
         <Reveal as="section" delay={0.05} aria-labelledby="conversions-heading">
