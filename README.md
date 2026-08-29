@@ -1,4 +1,4 @@
-# VELOOP Rewards — Exchange Center (Redesign)
+# VELOOP Rewards — Exchange Center
 
 **Repository:** https://github.com/Rudranil-12/Veloop_Watch_Ads
 **Reference (existing implementation):** https://velooprewards.in/exchange-center
