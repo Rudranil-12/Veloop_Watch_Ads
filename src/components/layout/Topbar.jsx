@@ -60,7 +60,7 @@ export default function Topbar({ onMenuClick }) {
       <div className={styles.right}>
         <span className={`${styles.statusPill} ${connection === 'live' ? styles.statusLive : styles.statusSync}`}>
           <Wifi size={12} />
-          {connection === 'live' ? 'Live' : 'Syncing'}
+          <span className={styles.statusLabel}>{connection === 'live' ? 'Live' : 'Syncing'}</span>
         </span>
 
         <div className={styles.balanceStrip}>
